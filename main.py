@@ -95,3 +95,58 @@ plt.imshow(img1_traspuesta)
 plt.subplot(1, 2, 2)
 plt.imshow(img2_traspuesta)
 plt.show()
+
+#6
+def convertir_escala_grises(imagen_color):
+    alto, ancho, _ = imagen_color.shape
+    imagen_gris = np.zeros((alto, ancho), dtype=np.uint8)
+
+    for i in range(alto):
+        for j in range(ancho):
+            promedio_canal = np.mean(imagen_color[i, j])
+            imagen_gris[i, j] = promedio_canal
+
+    return imagen_gris
+
+img1_gris = convertir_escala_grises(img1_recortada)
+img2_gris = convertir_escala_grises(img2_recortada)
+plt.figure(figsize=(10, 5))
+plt.subplot(1, 2, 1)
+plt.imshow(img1_gris, cmap='gray')
+plt.subplot(1, 2, 2)
+plt.imshow(img2_gris, cmap='gray')
+plt.show()
+
+#7
+def calcular_inversa(matriz):
+    if matriz.shape[0] != matriz.shape[1]:
+      print("La matriz no es cuadrada")
+      return None
+
+    if np.linalg.det(matriz) == 0:
+      print("El determinante de la matriz es cero")
+      return None
+        
+    matriz_inversa = np.linalg.inv(matriz)
+    return matriz_inversa
+    
+img1_inversa = calcular_inversa(img1_gris)
+img2_inversa = calcular_inversa(img2_gris)
+if img1_inversa is not None:
+    print("Inversa de la matriz de la imagen 1:\n", img1_inversa)
+if img2_inversa is not None:
+    print("\nInversa de la matriz de la imagen 2:\n", img2_inversa)
+
+#8
+alpha1 = 1.5  # α > 1
+alpha2 = 0.5  # 0 < α < 1
+img1_escalar_mayor = np.clip(alpha1 * img1_gris, 0, 255).astype(np.uint8)
+img1_escalar_menor = np.clip(alpha2 * img1_gris, 0, 255).astype(np.uint8)
+plt.subplot(2, 3, 2)
+plt.imshow(img1_escalar_mayor, cmap='gray')
+plt.title("Caso 1: α > 1")
+plt.subplot(2, 3, 3)
+plt.imshow(img1_escalar_menor, cmap='gray')
+plt.title("Caso 2: 0 < α < 1")
+plt.show()
+
